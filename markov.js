@@ -28,6 +28,7 @@ class MarkovMachine {
     }
 
     this.chains = chains;
+    console.log(this.chains);
   }
 
   // ** Pick random choice from array */

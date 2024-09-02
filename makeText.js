@@ -8,52 +8,46 @@ const process = require("process");
 // Make markov machine from text and generate text from it
 
 function generateText(text) {
-    let mm = new markov.MarkovMachine(text);
-    console.log(mm.makeText());
+  let mm = new markov.MarkovMachine(text);
+  console.log(mm.makeText());
 }
-
 
 // Read file and generate text from it
 
 function makeText(path) {
-    fs.readFile(path, "utf8", function cb(err, data) {
-        if (err) {
-            console.error(`Cannot read file: ${path}: ${err}`);
-            process.exit(1);
-        } else {
-            generateText(data);
-        }
-    });
+  fs.readFile(path, "utf8", function cb(err, data) {
+    if (err) {
+      console.error(`Cannot read file: ${path}: ${err}`);
+      process.exit(1);
+    } else {
+      generateText(data);
+    }
+  });
 }
-
 
 // read URL and make text from it
 
 async function makeURLText(url) {
-    let resp;
+  let resp;
 
-    try {
-        resp = await axios.get(url);
-    } catch (err) {
-        console.error(`Cannot read URL: ${url}: ${err}`);
-        process.exit(1);
-    }
-    generateText(resp.data)
+  try {
+    resp = await axios.get(url);
+  } catch (err) {
+    console.error(`Cannot read URL: ${url}: ${err}`);
+    process.exit(1);
+  }
+  generateText(resp.data);
 }
 
 // Interpret cmdline and decide what to do
 
-let [method, path] = process.execArgv.slice(2);
+let [method, path] = process.argv.slice(2);
 
-if (method === "file") {
-    makeText(path);
-}
-
-else if (method === "url") {
-    makeURLText(path);
-}
-
-else {
-    console.error(`Unknown method: ${method}`);
-    process.exit(1);
+if (method == "file") {
+  makeText(path);
+} else if (method == "url") {
+  makeURLText(path);
+} else {
+  console.error(`Unknown method: ${method}`);
+  process.exit(1);
 }
